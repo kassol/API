@@ -6,7 +6,7 @@ var userSchema = new Schema({
     name: String,
     email: String,
     username: String,
-    passward: String,
+    password: String,
     avarter: String
 });
 var collectionName = 'User';

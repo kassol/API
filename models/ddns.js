@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var ddnsSchema = new Schema({
     ip: String,
+    deviceInfo: String,
     updateDate: { type: Date, default: Date.now }
 });
 
