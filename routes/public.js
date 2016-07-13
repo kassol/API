@@ -8,7 +8,7 @@ var Token = require('../models/token');
 
 /** Sign Up */
 router.route('/signup').get(function (req, res, next) {
-    res.json({ Code: 1, Message: 'Should not use this method.' });
+    res.json({ Code: 1, Message: 'Should not use this method!' });
 }).post(function (req, res, next) {
     var username = req.body.username;
     var password = req.body.password;
@@ -33,7 +33,7 @@ router.route('/signup').get(function (req, res, next) {
             user.name = name;
             user.email = email;
             user.username = username;
-            user.password = crypto.pbkdf2Sync(password, 'Jarvis', 100000, 512, 'sha512').toString('hex');
+            user.password = crypto.pbkdf2Sync(password, 'Jarvis', 100000, 32, 'sha512').toString('hex');
             //user.password = crypto.createHash('sha512').update(password).digest('hex');
             if (avarter === undefined) {
                 avarter = req.headers.host + '/assets/img/default_avarter.png';
@@ -62,10 +62,10 @@ router.route('/signin').get(function(req, res, next) {
         if (err) {
             return res.send(err);
         }
-        if (user === undefined) {
+        if (user === undefined || user === null) {
             return res.json({ 'Code': 1, 'Message': '没有该用户' });
         }
-        if (crypto.pbkdf2Sync(password, 'Jarvis', 100000, 512, 'sha512').toString('hex') != user.password) {
+        if (crypto.pbkdf2Sync(password, 'Jarvis', 100000, 32, 'sha512').toString('hex') != user.password) {
             return res.json({ 'Code': 1, 'Message': '密码错误' });
         }
         var tokenid = uuid.v1();
@@ -82,7 +82,7 @@ router.route('/signin').get(function(req, res, next) {
                 if (err) {
                     return res.send(err);
                 }
-                res.json({ 'Code': 0, 'Message': '登录成功', Result: { 'userID': user.userid, 'token': tokenid } });
+                res.json({ 'Code': 0, 'Message': '登录成功', Result: { 'userId': user.userid, 'token': tokenid } });
             });
         });
     });
