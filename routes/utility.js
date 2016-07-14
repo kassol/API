@@ -7,7 +7,7 @@ var User = require('../models/user');
 router.route('/submitip').get(function (req, res, next) {
     res.json({ 'Code': 1, 'Message': "Should not use this method!" });
 }).post(function (req, res, next) {
-    var ip = req.connection.remoteAddress;
+    var ip = req.header.x-real-ip;
     var deviceinfo = req.body.deviceinfo;
     var userid = req.body.userid;
     if (userid === undefined || userid === null) {
