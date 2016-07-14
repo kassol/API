@@ -16,13 +16,13 @@ router.route('/signup').get(function (req, res, next) {
     var name = req.body.name;
     var avarter = req.body.avarter;
     if (username === undefined || username === null) {
-        return res.json({ Code: 1, Message: 'Lack of parameters.' });
+        return res.json({ 'Code': 1, 'Message': 'Lack of parameters!' });
     }
     if (password === undefined || password === null) {
-        return res.json({ Code: 1, Message: 'Lack of parameters' });
+        return res.json({ 'Code': 1, 'Message': 'Lack of parameters!' });
     }
     if (email === undefined || email === null) {
-        return res.json({ Code: 1, Message: 'Lack of parameters' });
+        return res.json({ 'Code': 1, 'Message': 'Lack of parameters!' });
     }
     User.findOne({ 'username': username }, function(err, user) {
         if (err) {
@@ -43,17 +43,17 @@ router.route('/signup').get(function (req, res, next) {
                 if (err) {
                     return res.send(err);
                 }
-                res.json({ Code: 0, Message: 'Registration Successful.' });
+                res.json({ 'Code': 0, 'Message': 'Registration Successful.' });
             });
         } else {
-            return res.json({ Code: 1, Message: 'Username is unavailabel.' });
+            return res.json({ 'Code': 1, 'Message': 'Username is unavailabel.' });
         }
     });
     });
 
 /** Sign In */
 router.route('/signin').get(function(req, res, next) {
-    res.json({ Code: 1, Message: 'Should not use this method!' });
+    res.json({ 'Code': 1, 'Message': 'Should not use this method!' });
 }).post(function(req, res, next) {
     var username = req.body.username;
     var password = req.body.password;
@@ -81,7 +81,7 @@ router.route('/signin').get(function(req, res, next) {
                 if (err) {
                     return res.send(err);
                 }
-                res.json({ 'Code': 0, 'Message': 'Sign in successful', Result: { 'userId': user.userid, 'token': tokenid } });
+                res.json({ 'Code': 0, 'Message': 'Sign in successful', 'Result': { 'userId': user.userid, 'token': tokenid } });
             });
         });
     });
