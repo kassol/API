@@ -16,13 +16,13 @@ router.route('/signup').get(function (req, res, next) {
     var name = req.body.name;
     var avarter = req.body.avarter;
     if (username === undefined || username === null) {
-        return res.json({ Code: 1, Message: '缺少参数' });
+        return res.json({ Code: 1, Message: 'Lack of parameters.' });
     }
     if (password === undefined || password === null) {
-        return res.json({ Code: 1, Message: '缺少参数' });
+        return res.json({ Code: 1, Message: 'Lack of parameters' });
     }
     if (email === undefined || email === null) {
-        return res.json({ Code: 1, Message: '缺少参数' });
+        return res.json({ Code: 1, Message: 'Lack of parameters' });
     }
     User.findOne({ 'username': username }, function(err, user) {
         if (err) {
@@ -34,9 +34,8 @@ router.route('/signup').get(function (req, res, next) {
             user.email = email;
             user.username = username;
             user.password = crypto.pbkdf2Sync(password, 'Jarvis', 100000, 32, 'sha512').toString('hex');
-            //user.password = crypto.createHash('sha512').update(password).digest('hex');
             if (avarter === undefined) {
-                avarter = req.headers.host + '/assets/img/default_avarter.png';
+                avarter = 'http://' + req.headers.host + '/assets/img/default_avarter.png';
             }
             user.avarter = avarter;
             user.userid = uuid.v1();
@@ -44,10 +43,10 @@ router.route('/signup').get(function (req, res, next) {
                 if (err) {
                     return res.send(err);
                 }
-                res.json({ Code: 0, Message: '注册成功' });
+                res.json({ Code: 0, Message: 'Registration Successful.' });
             });
         } else {
-            return res.json({ Code: 1, Message: '用户名已存在' });
+            return res.json({ Code: 1, Message: 'Username is unavailabel.' });
         }
     });
     });
@@ -63,10 +62,10 @@ router.route('/signin').get(function(req, res, next) {
             return res.send(err);
         }
         if (user === undefined || user === null) {
-            return res.json({ 'Code': 1, 'Message': '没有该用户' });
+            return res.json({ 'Code': 1, 'Message': 'Username doesn\'t exist.' });
         }
         if (crypto.pbkdf2Sync(password, 'Jarvis', 100000, 32, 'sha512').toString('hex') != user.password) {
-            return res.json({ 'Code': 1, 'Message': '密码错误' });
+            return res.json({ 'Code': 1, 'Message': 'Password is wrong.' });
         }
         var tokenid = uuid.v1();
         Token.findOne({ 'userid': user.userid }, function(err, token) {
@@ -82,7 +81,7 @@ router.route('/signin').get(function(req, res, next) {
                 if (err) {
                     return res.send(err);
                 }
-                res.json({ 'Code': 0, 'Message': '登录成功', Result: { 'userId': user.userid, 'token': tokenid } });
+                res.json({ 'Code': 0, 'Message': 'Sign in successful', Result: { 'userId': user.userid, 'token': tokenid } });
             });
         });
     });
