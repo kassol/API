@@ -36,6 +36,7 @@ router.route('/submitip').get(function (req, res, next) {
                 ddns.userid = userid;
             }
             ddns.ip = ip;
+            ddns.updatedate = Date.now();
             ddns.save(function (err) {
                 if (err) {
                     return res.send(err);
