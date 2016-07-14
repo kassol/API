@@ -8,6 +8,9 @@ router.route('/submitip').get(function (req, res, next) {
     res.json({ 'Code': 1, 'Message': "Should not use this method!" });
 }).post(function (req, res, next) {
     var ip = req.headers['x-real-ip'];
+    if (ip === undefined) {
+        ip = req.connection.remoteAddress;
+    }
     var deviceinfo = req.body.deviceinfo;
     var userid = req.body.userid;
     if (userid === undefined || userid === null) {
