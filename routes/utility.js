@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var DDNS = require('../models/ddns');
+var Token = require('../models/token');
 var User = require('../models/user');
 
 /** Submit IP */
@@ -47,13 +48,28 @@ router.route('/submitip').get(function (req, res, next) {
     });
 });
 
-router.get('/ip', function(req, res, next) {
-    var query = DDNS.find({}).limit(5).sort({ updateDate: -1 });
-    query.exec(function(err, results) {
+/** Get IP */
+router.route('/ip').get(function (req, res, next) {
+    res.json({ 'Code': 1, 'Message': "Should not use this method!" });
+}).post(function (req, res, next) {
+    var userid = req.body.userid;
+    var token = req.body.token;
+    if (userid === undefined || userid === null || token === undefined || token === null) {
+        return res.json({ 'Code': 1, 'Message': 'Lack of parameters!' });
+    }
+    Token.findOne({ 'userid': userid, 'token': token }, function(err, usertoken) {
         if (err) {
-            res.json({ 'Code': 1, 'Message': "Error!" });
+            return res.send(err);
         }
-        res.json({ 'Code': 0, 'Result': results });
+        if (usertoken === null) {
+            return res.json({ Code: 1, Message: 'Token does not exist or is out of date.' });
+        }
+        DDNS.find({ 'userid': userid }, function (err, results) {
+            if (err) {
+                return res.send(err);
+            }
+            res.render('ip', { 'title': 'IPs', 'devicelist': results });
+        });
     });
 });
 
