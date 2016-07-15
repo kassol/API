@@ -10,4 +10,4 @@ var ddnsSchema = new Schema({
 
 var collectionName = 'DDNS';
 
-module.exports = mongoose.model('DDNS', ddnsSchema);
+module.exports = mongoose.model('DDNS', ddnsSchema, collectionName);

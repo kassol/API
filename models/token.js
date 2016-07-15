@@ -3,7 +3,8 @@ var Schema = mongoose.Schema;
 
 var tokenSchema = new Schema({
     userid: String,
-    token: String
+    token: String,
+    deviceinfo: String
 });
 
 var collectionName = 'Token';

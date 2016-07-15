@@ -57,6 +57,10 @@ router.route('/signin').get(function(req, res, next) {
 }).post(function(req, res, next) {
     var username = req.body.username;
     var password = req.body.password;
+    var deviceinfo = req.body.deviceinfo;
+    if (deviceinfo === undefined || deviceinfo == null) {
+        return res.json({ 'Code': 1, 'Message': 'Lack of parameters!' });
+    }
     User.findOne({ 'username': username }, function(err, user) {
         if (err) {
             return res.send(err);
@@ -68,7 +72,7 @@ router.route('/signin').get(function(req, res, next) {
             return res.json({ 'Code': 1, 'Message': 'Password is wrong.' });
         }
         var tokenid = uuid.v1();
-        Token.findOne({ 'userid': user.userid }, function(err, token) {
+        Token.findOne({ 'userid': user.userid, 'deviceinfo': deviceinfo }, function(err, token) {
             if (err) {
                 res.send(err);
             }
@@ -77,6 +81,7 @@ router.route('/signin').get(function(req, res, next) {
             }
             token.userid = user.userid;
             token.token = tokenid;
+            token.deviceinfo = deviceinfo;
             token.save(function(err) {
                 if (err) {
                     return res.send(err);
