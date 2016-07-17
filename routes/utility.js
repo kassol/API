@@ -50,10 +50,8 @@ router.route('/submitip').get(function (req, res, next) {
 
 /** Get IP */
 router.route('/ip').get(function (req, res, next) {
-    res.json({ 'Code': 1, 'Message': "Should not use this method!" });
-}).post(function (req, res, next) {
-    var userid = req.body.userid;
-    var token = req.body.token;
+    var userid = req.query.userid;
+    var token = req.query.token;
     if (userid === undefined || userid === null || token === undefined || token === null) {
         return res.json({ 'Code': 1, 'Message': 'Lack of parameters!' });
     }
@@ -71,6 +69,8 @@ router.route('/ip').get(function (req, res, next) {
             res.render('ip', { 'title': 'IPs', 'devicelist': results });
         });
     });
+}).post(function (req, res, next) {
+    res.json({ 'Code': 1, 'Message': "Should not use this method!" });
 });
 
 module.exports = router;
